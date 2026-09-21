@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Un jardín que florece contigo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+
+    --sky-top:#bfe3ff;
+    --sky-mid:#eaf3d9;
+    --sky-bottom:#fff3c2;
+    --sun:#ffd23f;
+    --sun-glow: rgba(255,210,63,0.55);
+    --ground-1:#9fc48a;
+    --ground-2:#6a9c66;
+    --ground-3:#4d7a4f;
+    --petal-1:#ffd94a;
+    --petal-2:#ffc93c;
+    --petal-3:#f2a900;
+    --center-1:#8a5a2b;
+    --center-2:#5c3b18;
+    --stem:#4c7a57;
+    --ink:#312d1e;
+    --ink-soft:#5a5540;
+    --card-bg: rgba(255,255,255,0.62);
+    --card-border: rgba(76,60,20,0.16);
+    --note-bg: #fffaf0;
+    --note-edge: rgba(120,90,20,0.18);
+    --input-bg: rgba(255,255,255,0.85);
+    --button-ink:#3a2a08;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --sky-top:#0c1230;
+      --sky-mid:#1b2450;
+      --sky-bottom:#2c2a4e;
+      --sun:#f3e7ad;
+      --sun-glow: rgba(243,231,173,0.35);
+      --ground-1:#233f2b;
+      --ground-2:#16301e;
+      --ground-3:#0f2216;
+      --petal-1:#ffe07a;
+      --petal-2:#ffd35c;
+      --petal-3:#f4b53a;
+      --center-1:#6b4420;
+      --center-2:#402711;
+      --stem:#3a6146;
+      --ink:#f3efd8;
+      --ink-soft:#cfc9a8;
+      --card-bg: rgba(20,22,40,0.55);
+      --card-border: rgba(243,239,216,0.16);
+      --note-bg: #22213a;
+      --note-edge: rgba(243,231,173,0.25);
+      --input-bg: rgba(255,255,255,0.08);
+      --button-ink:#2a2109;
+    }
+  }
+  :root[data-theme="dark"]{
+    --sky-top:#0c1230;
+    --sky-mid:#1b2450;
+    --sky-bottom:#2c2a4e;
+    --sun:#f3e7ad;
+    --sun-glow: rgba(243,231,173,0.35);
+    --ground-1:#233f2b;
+    --ground-2:#16301e;
+    --ground-3:#0f2216;
+    --petal-1:#ffe07a;
+    --petal-2:#ffd35c;
+    --petal-3:#f4b53a;
+    --center-1:#6b4420;
+    --center-2:#402711;
+    --stem:#3a6146;
+    --ink:#f3efd8;
+    --ink-soft:#cfc9a8;
+    --card-bg: rgba(20,22,40,0.55);
+    --card-border: rgba(243,239,216,0.16);
+    --note-bg: #22213a;
+    --note-edge: rgba(243,231,173,0.25);
+    --input-bg: rgba(255,255,255,0.08);
+    --button-ink:#2a2109;
+  }
+
+  html{ scroll-padding-top: env(safe-area-inset-top, 0px); }
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    min-height:100svh;
+    font-family:'Quicksand', sans-serif;
+    color: var(--ink);
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 45%, var(--sky-bottom) 72%);
+    overflow-x:hidden;
+    transition: background 0.6s ease;
+  }
+
+  .sun{
+    position:absolute;
+    top: calc(4.5vh + env(safe-area-inset-top,0px));
+    right: 8vw;
+    width: 84px;
+    height: 84px;
+    border-radius:50%;
+    background: var(--sun);
+    box-shadow: 0 0 0 18px var(--sun-glow), 0 0 60px 10px var(--sun-glow);
+    z-index:0;
+  }
+
+  header{
+    position:relative;
+    z-index:2;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: calc(8vh + env(safe-area-inset-top,0px)) 24px 18px;
+    text-align:center;
+  }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-style:italic;
+    font-size: clamp(2rem, 6vw, 3rem);
+    line-height:1.1;
+    margin: 0 0 14px;
+  }
+
+  header p{
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    max-width: 46ch;
+    margin: 0 auto;
+    line-height:1.5;
+  }
+
+  .estacion{
+    position:relative;
+    z-index:2;
+    max-width: 480px;
+    margin: 20px auto 0;
+    padding: 22px 24px 24px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 26px 26px 26px 6px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .btn-plantar{
+    appearance:none;
+    border:none;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding: 13px 20px;
+    margin-top:14px;
+    width:100%;
+    justify-content:center;
+    border-radius: 999px;
+    background: linear-gradient(180deg, var(--petal-1), var(--petal-3));
+    color: var(--button-ink);
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size: 1rem;
+    box-shadow: 0 6px 0 0 rgba(0,0,0,0.12), 0 8px 18px rgba(0,0,0,0.12);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .btn-plantar:hover{ transform: translateY(-1px); }
+  .btn-plantar:active{
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 0 rgba(0,0,0,0.12), 0 4px 10px rgba(0,0,0,0.12);
+  }
+  .btn-plantar:focus-visible{ outline: 2px solid var(--ink); outline-offset:3px; }
+
+  .semilla-icono{ flex-shrink:0; }
+
+  .contador{
+    margin: 12px 0 0;
+    text-align:center;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+
+  .jardin-wrap{
+    position:relative;
+    z-index:1;
+    margin-top: 6vh;
+  }
+
+  .cielo-degradado{
+    position:relative;
+    height: min(52vh, 460px);
+    min-height:300px;
+  }
+
+  .suelo{
+    position:relative;
+    background: linear-gradient(180deg, var(--ground-1), var(--ground-2) 55%, var(--ground-3));
+  }
+
+  .ola-borde{
+    display:block;
+    width:100%;
+    height: 46px;
+    margin-bottom:-2px;
+  }
+  .ola-borde path{ fill: var(--ground-1); }
+
+  .jardin{
+    position:relative;
+    height: 260px;
+    overflow: visible;
+  }
+
+  .flor{
+    position:absolute;
+    bottom: 0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    transform-origin: bottom center;
+    cursor:pointer;
+    background:none;
+    border:none;
+    padding: 10px;
+    animation: nacer 0.55s cubic-bezier(.22,1.4,.44,1) both,
+               balanceo var(--dur,4.2s) ease-in-out var(--retraso,0s) infinite;
+  }
+  .flor:focus-visible .cabeza{ outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 50%; }
+
+  @media (prefers-reduced-motion: reduce){
+    .flor{ animation: nacer 0.4s ease both; }
+  }
+
+  @keyframes nacer{
+    0%{ transform: scale(0) translateY(10px); opacity:0; }
+    70%{ transform: scale(1.08) translateY(0); opacity:1; }
+    100%{ transform: scale(1) translateY(0); }
+  }
+  @keyframes balanceo{
+    0%,100%{ transform: rotate(-3.5deg); }
+    50%{ transform: rotate(3.5deg); }
+  }
+
+  .cabeza{ display:block; }
+
+  .tallo-envoltura{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top:-6px;
+  }
+  .tallo{
+    width:4px;
+    border-radius:3px;
+    background: linear-gradient(180deg, var(--stem), var(--ground-3));
+  }
+  .hoja{
+    width:20px;
+    height:11px;
+    background: var(--stem);
+    border-radius: 0 100% 0 100%;
+    margin: -4px 0;
+  }
+  .hoja.izq{ align-self:flex-start; margin-left:-14px; transform: rotate(-10deg); }
+  .hoja.der{ align-self:flex-end; margin-right:-14px; transform: rotate(190deg); }
+
+  .flor.especial .cabeza{ filter: drop-shadow(0 0 10px var(--sun-glow)); }
+
+  .nota{
+    position:fixed;
+    left:50%;
+    bottom: calc(18px + env(safe-area-inset-bottom,0px));
+    transform: translate(-50%, 140%);
+    max-width: 380px;
+    width: calc(100% - 40px);
+    background: var(--note-bg);
+    border: 1px solid var(--note-edge);
+    border-radius: 22px 22px 6px 22px;
+    padding: 16px 44px 16px 20px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size: 1.05rem;
+    line-height:1.45;
+    color: var(--ink);
+    z-index: 5;
+    transition: transform 0.32s cubic-bezier(.2,.9,.3,1);
+  }
+  .nota.visible{ transform: translate(-50%, 0); }
+
+  .nota .cerrar{
+    position:absolute;
+    top:10px;
+    right:12px;
+    border:none;
+    background:none;
+    font-family:'Quicksand', sans-serif;
+    font-style:normal;
+    font-size:1.1rem;
+    line-height:1;
+    color: var(--ink-soft);
+    cursor:pointer;
+    padding:4px;
+  }
+  .nota .cerrar:focus-visible{ outline: 2px solid var(--ink); border-radius:6px; }
+
+  footer{
+    position:relative;
+    z-index:1;
+    text-align:center;
+    padding: 22px 20px calc(26px + env(safe-area-inset-bottom,0px));
+    background: var(--ground-3);
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+  }
+  :root:not([data-theme="light"]) footer{ color: rgba(243,239,216,0.6); }
+  :root[data-theme="dark"] footer{ color: rgba(243,239,216,0.6); }
+
+  @media (min-width: 720px){
+    .btn-plantar{ width:auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sun" aria-hidden="true"></div>
+
+<header>
+  <h1 id="titulo">Un jardín que florece contigo</h1>
+  <p id="subtitulo">Siembra flores amarillas y descubre qué tiene cada una para decirte.</p>
+</header>
+
+<section class="estacion" aria-label="Estación de siembra">
+  <button class="btn-plantar" id="btnPlantar" type="button">
+    <svg class="semilla-icono" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+      <ellipse cx="9" cy="10" rx="4.2" ry="6" fill="#5c3b18"/>
+      <path d="M9 4 C 9 2, 11 1, 13 1" stroke="#4c7a57" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    </svg>
+    Sembrar una flor
+  </button>
+  <p class="contador" id="contador">Aún no has sembrado ninguna flor.</p>
+</section>
+
+<div class="jardin-wrap">
+  <div class="cielo-degradado" aria-hidden="true"></div>
+  <div class="suelo">
+    <svg class="ola-borde" viewBox="0 0 1200 46" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,30 C150,50 300,10 450,25 C600,40 750,5 900,20 C1050,35 1150,15 1200,25 L1200,0 L0,0 Z"></path>
+    </svg>
+    <div class="jardin" id="jardin" role="group" aria-label="Tu jardín — toca una flor para leer su mensaje"></div>
+  </div>
+</div>
+
+<div class="nota" id="nota" role="status" aria-live="polite">
+  <button class="cerrar" id="cerrarNota" aria-label="Cerrar mensaje">×</button>
+  <span id="notaTexto"></span>
+</div>
+
+<footer>Un jardín pequeño, hecho para crecer despacio.</footer>
+
+<script>
+(function(){
+  var jardin = document.getElementById('jardin');
+  var btnPlantar = document.getElementById('btnPlantar');
+  var contador = document.getElementById('contador');
+  var nota = document.getElementById('nota');
+  var notaTexto = document.getElementById('notaTexto');
+  var cerrarNota = document.getElementById('cerrarNota');
+
+  var MENSAJES = [
+    "Como esta flor, floreces incluso en los días grises.",
+    "Tu sonrisa es del mismo amarillo que estos pétalos: imposible de ignorar.",
+    "Hay algo en ti que hace que todo alrededor se vea más brillante.",
+    "Las flores amarillas significan alegría, y tú la contagias sin esfuerzo.",
+    "Gracias por existir tal como eres.",
+    "Eres de esas personas que hacen que un día cualquiera se sienta especial.",
+    "Esta flor creció solo para recordarte lo mucho que vales.",
+    "El sol se pone amarillo por las tardes porque quiere parecerse un poco a ti.",
+    "Mereces tanta luz como la que guarda esta flor en sus pétalos.",
+    "Sigue creciendo a tu propio ritmo, como esta flor lo hizo.",
+    "Tu forma de ver el mundo es un regalo poco común.",
+    "Cada pétalo de esta flor es una razón para sonreír hoy.",
+    "Eres la clase de persona que la gente recuerda con cariño.",
+    "No hace falta ser perfecto para ser hermoso: mírame a mí.",
+    "Hoy es un buen día para recordarte lo increíble que eres.",
+    "Las cosas buenas, como esta flor, también empiezan siendo pequeñas.",
+    "Tu energía ilumina como si guardaras un poco de sol adentro.",
+    "Mereces flores de verdad, no solo las que crecen en una pantalla.",
+    "Sigue aquí: el jardín es mejor contigo cuidándolo.",
+    "Eres capaz de florecer incluso en la tierra más difícil.",
+    "Alguien debería decirte más seguido lo especial que eres.",
+    "Esta flor amarilla eligió nacer justo cuando la necesitabas.",
+    "Tu risa probablemente suena como se ve un campo de girasoles.",
+    "Nunca dejes de plantar cosas bonitas, incluso si tardan en crecer."
+  ];
+
+  var MENSAJES_ESPECIALES = [
+    "Esta es una flor especial: crece más grande porque tu jardín ya tiene raíces.",
+    "Pocas flores llegan tan lejos. Esta, y tú, lo han logrado.",
+    "Un jardín que no deja de crecer se parece bastante a ti."
+  ];
+
+  var PALETA = [
+    { petalo:'var(--petal-1)', centro:'var(--center-1)' },
+    { petalo:'var(--petal-2)', centro:'var(--center-2)' },
+    { petalo:'var(--petal-3)', centro:'var(--center-1)' }
+  ];
+
+  var STORE_KEY_FLORES = 'jardin-amarillo:flores';
+
+  var mensajesBarajados = [];
+  var posicionesUsadas = [];
+  var totalFlores = 0;
+
+  function barajar(lista){
+    var copia = lista.slice();
+    for (var i = copia.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = copia[i]; copia[i] = copia[j]; copia[j] = tmp;
+    }
+    return copia;
+  }
+
+  function proximoMensaje(){
+    if (mensajesBarajados.length === 0){
+      mensajesBarajados = barajar(MENSAJES);
+    }
+    return mensajesBarajados.pop();
+  }
+
+  function nombreActual(){
+    return 'tú';
+  }
+
+  function actualizarContador(){
+    var texto;
+    if (totalFlores === 0) texto = 'Aún no has sembrado ninguna flor.';
+    else if (totalFlores === 1) texto = 'Tu jardín tiene 1 flor.';
+    else texto = 'Tu jardín tiene ' + totalFlores + ' flores.';
+    contador.textContent = texto;
+  }
+
+  function elegirPosicion(){
+    var intento, candidata;
+    for (intento = 0; intento < 24; intento++){
+      candidata = 4 + Math.random() * 92;
+      var libre = posicionesUsadas.every(function(p){ return Math.abs(p - candidata) > 7; });
+      if (libre) break;
+    }
+    posicionesUsadas.push(candidata);
+    if (posicionesUsadas.length > 40) posicionesUsadas.shift();
+    return candidata;
+  }
+
+  function crearCabezaSVG(tipo, colores, size){
+    var half = size/2;
+    var svgns = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(svgns,'svg');
+    svg.setAttribute('class','cabeza');
+    svg.setAttribute('width', size);
+    svg.setAttribute('height', size);
+    svg.setAttribute('viewBox','0 0 100 100');
+
+    function petalo(cx, cy, rx, ry, rot){
+      var p = document.createElementNS(svgns,'ellipse');
+      p.setAttribute('cx', cx); p.setAttribute('cy', cy);
+      p.setAttribute('rx', rx); p.setAttribute('ry', ry);
+      p.setAttribute('fill', colores.petalo);
+      p.setAttribute('transform', 'rotate(' + rot + ' 50 50)');
+      return p;
+    }
+
+    var petalos, rx, ry, count, i, angulo;
+    if (tipo === 'girasol'){
+      count = 13; rx = 13; ry = 30;
+      for (i = 0; i < count; i++){
+        angulo = (360/count) * i;
+        svg.appendChild(petalo(50, 22, rx, ry, angulo));
+      }
+      var centro = document.createElementNS(svgns,'circle');
+      centro.setAttribute('cx',50); centro.setAttribute('cy',50); centro.setAttribute('r',17);
+      centro.setAttribute('fill', colores.centro);
+      svg.appendChild(centro);
+      for (i = 0; i < 10; i++){
+        var d = document.createElementNS(svgns,'circle');
+        var a = Math.random()*Math.PI*2, r = Math.random()*11;
+        d.setAttribute('cx', 50 + Math.cos(a)*r);
+        d.setAttribute('cy', 50 + Math.sin(a)*r);
+        d.setAttribute('r', 1.3);
+        d.setAttribute('fill','rgba(0,0,0,0.18)');
+        svg.appendChild(d);
+      }
+    } else if (tipo === 'boton'){
+      count = 5; rx = 15; ry = 22;
+      for (i = 0; i < count; i++){
+        angulo = (360/count) * i;
+        svg.appendChild(petalo(50, 26, rx, ry, angulo));
+      }
+      var centro2 = document.createElementNS(svgns,'circle');
+      centro2.setAttribute('cx',50); centro2.setAttribute('cy',50); centro2.setAttribute('r',9);
+      centro2.setAttribute('fill', colores.centro);
+      svg.appendChild(centro2);
+    } else {
+      count = 8; rx = 10; ry = 26;
+      for (i = 0; i < count; i++){
+        angulo = (360/count) * i;
+        svg.appendChild(petalo(50, 20, rx, ry, angulo));
+      }
+      var centro3 = document.createElementNS(svgns,'circle');
+      centro3.setAttribute('cx',50); centro3.setAttribute('cy',50); centro3.setAttribute('r',13);
+      centro3.setAttribute('fill', colores.centro);
+      svg.appendChild(centro3);
+    }
+    return svg;
+  }
+
+  function crearFlorDOM(datos){
+    var tipos = ['margarita','girasol','boton'];
+    var tipo = datos.tipo || tipos[Math.floor(Math.random()*tipos.length)];
+    var colores = PALETA[Math.floor(Math.random()*PALETA.length)];
+    var size = datos.especial ? 92 : (54 + Math.random()*26);
+    var tallo = datos.especial ? 130 : (78 + Math.random()*46);
+    var left = datos.left;
+    var dur = (3.6 + Math.random()*2).toFixed(2);
+    var retraso = (Math.random()*2).toFixed(2);
+
+    var btn = document.createElement('button');
+    btn.className = 'flor' + (datos.especial ? ' especial' : '');
+    btn.style.left = left + '%';
+    btn.style.setProperty('--dur', dur + 's');
+    btn.style.setProperty('--retraso', retraso + 's');
+    btn.setAttribute('aria-label', 'Flor. Toca para leer su mensaje.');
+    btn.type = 'button';
+
+    var cabeza = crearCabezaSVG(tipo, colores, size);
+    btn.appendChild(cabeza);
+
+    var wrap = document.createElement('div');
+    wrap.className = 'tallo-envoltura';
+
+    var hojaIzq = document.createElement('div');
+    hojaIzq.className = 'hoja izq';
+    hojaIzq.style.background = 'var(--stem)';
+
+    var tallo1 = document.createElement('div');
+    tallo1.className = 'tallo';
+    tallo1.style.height = (tallo*0.45) + 'px';
+
+    wrap.appendChild(hojaIzq);
+    wrap.appendChild(tallo1);
+
+    if (Math.random() > 0.4){
+      var hojaDer = document.createElement('div');
+      hojaDer.className = 'hoja der';
+      wrap.appendChild(hojaDer);
+      var tallo2 = document.createElement('div');
+      tallo2.className = 'tallo';
+      tallo2.style.height = (tallo*0.55) + 'px';
+      wrap.appendChild(tallo2);
+    } else {
+      tallo1.style.height = tallo + 'px';
+    }
+
+    btn.appendChild(wrap);
+
+    btn.addEventListener('click', function(){
+      mostrarNota(datos.mensaje);
+    });
+
+    return btn;
+  }
+
+  function mostrarNota(texto){
+    notaTexto.textContent = texto.replace('{n}', nombreActual());
+    nota.classList.add('visible');
+  }
+
+  cerrarNota.addEventListener('click', function(){
+    nota.classList.remove('visible');
+  });
+
+  function sembrarFlor(especial){
+    totalFlores++;
+    var mensaje;
+    if (especial){
+      mensaje = MENSAJES_ESPECIALES[Math.floor(Math.random()*MENSAJES_ESPECIALES.length)];
+    } else {
+      mensaje = proximoMensaje();
+    }
+    var datos = {
+      left: elegirPosicion(),
+      mensaje: mensaje,
+      especial: !!especial
+    };
+    var el = crearFlorDOM(datos);
+    jardin.appendChild(el);
+    actualizarContador();
+    guardarEstado();
+    return datos;
+  }
+
+  function guardarEstado(){
+    try{
+      localStorage.setItem(STORE_KEY_FLORES, String(totalFlores));
+    } catch(e){ /* almacenamiento no disponible: seguimos sin recordar */ }
+  }
+
+  btnPlantar.addEventListener('click', function(){
+    var especial = (totalFlores > 0) && ((totalFlores + 1) % 7 === 0);
+    var datos = sembrarFlor(especial);
+    mostrarNota(datos.mensaje);
+  });
+
+  // Restaurar jardín previo del visitante (si su navegador lo permite)
+  (function restaurar(){
+    var floresGuardadas = 0;
+    try{
+      floresGuardadas = parseInt(localStorage.getItem(STORE_KEY_FLORES) || '0', 10) || 0;
+    } catch(e){ /* sin memoria previa */ }
+
+    var inicial = Math.min(floresGuardadas, 24) || 3;
+    for (var i = 0; i < inicial; i++){
+      sembrarFlor((i > 0) && ((i + 1) % 7 === 0));
+    }
+  })();
+
+})();
+</script>
+</body>
+</html>
